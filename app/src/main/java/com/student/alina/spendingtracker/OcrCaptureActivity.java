@@ -13,9 +13,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.student.alina.spendingtracker.entities.Category;
+import com.student.alina.spendingtracker.entities.Expense;
+import com.student.alina.spendingtracker.interfaces.IExpensesType;
+import com.student.alina.spendingtracker.utils.RealmManager;
 import com.wordpress.priyankvex.easyocrscannerdemo.Config;
 import com.wordpress.priyankvex.easyocrscannerdemo.EasyOcrScanner;
 import com.wordpress.priyankvex.easyocrscannerdemo.EasyOcrScannerListener;
+
+import java.util.Date;
 
 
 public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScannerListener {
@@ -90,9 +96,15 @@ public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScan
      */
     @Override
     public void onOcrScanFinished(Bitmap bitmap, String recognizedText) {
-        //textView.setText(recognizedText);
+        String categoryName = "linella";
+        Category category = new Category(categoryName, IExpensesType.MODE_EXPENSES);
+        RealmManager.getInstance().save(category, Category.class);
+        String description = "cheluieli";
+        Date selectedDate = new Date();
+        RealmManager.getInstance().save(new Expense(description, selectedDate, IExpensesType.MODE_EXPENSES, category,Float.valueOf(recognizedText)), Expense.class);
         if (mProgressDialog.isShowing()){
             mProgressDialog.dismiss();
         }
+        OcrCaptureActivity.this.finish();
     }
 }

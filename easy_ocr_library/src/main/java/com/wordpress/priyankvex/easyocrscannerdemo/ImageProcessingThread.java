@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Priyank(@priyankvex) on 27/8/15.
@@ -53,10 +55,24 @@ public class ImageProcessingThread extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
+        final Pattern totalAmount = Pattern.compile( "(.*[T,T,L]){3}" );
+        final Pattern sumaAmount = Pattern.compile( "(.*[S,U,M,A]){3}" );
         processImage();
         makeTessdataReady();
         scannedText = scanImage();
-        Log.d(Config.TAG, "Scanned test : " + scannedText);
+        String[] words = scannedText.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            Log.d(Config.TAG, words[i]);
+            Matcher m = totalAmount.matcher(words[i]);
+            Matcher m1 = sumaAmount.matcher(words[i]);
+            if (m.find() || m1.find()) {
+                String total = words[i+1];
+                String total_amount = total.replaceAll("[^\\d,]", "");
+                Log.d(Config.TAG, "Total amount:" + total_amount);
+                break;
+            }
+        }
+        //Log.d(Config.TAG, "Scanned test : " + scannedText);
         return null;
     }
 

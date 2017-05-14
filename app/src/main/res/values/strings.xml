@@ -52,7 +52,7 @@
     <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="country_currency">Country Currency</string>
     <string name="pref_country_key">country_key</string>
-    <string name="default_country">US</string>
+    <string name="default_country">MD</string>
     <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
     <string name="tv_title_transition">tvTotalTransition</string>
     <string name="date_placeholder">date placeholder</string>
