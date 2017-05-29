@@ -66,7 +66,7 @@ public class ImageProcessingThread extends AsyncTask<Void, Void, Void> {
             Matcher m = totalAmount.matcher(words[i]);
             Matcher m1 = sumaAmount.matcher(words[i]);
             if (m.find() || m1.find()) {
-                String total = words[i+1];
+                String total = words[i + 1];
                 String total_amount = total.replaceAll("[^\\d,]", "");
                 Log.d(Config.TAG, "Total amount:" + total_amount);
                 break;

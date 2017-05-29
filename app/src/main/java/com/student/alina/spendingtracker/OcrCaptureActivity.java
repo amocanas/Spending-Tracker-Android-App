@@ -1,6 +1,7 @@
 package com.student.alina.spendingtracker;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,23 +11,24 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
+import android.view.Window;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.student.alina.spendingtracker.entities.Category;
-import com.student.alina.spendingtracker.entities.Expense;
-import com.student.alina.spendingtracker.interfaces.IExpensesType;
-import com.student.alina.spendingtracker.utils.RealmManager;
 import com.wordpress.priyankvex.easyocrscannerdemo.Config;
 import com.wordpress.priyankvex.easyocrscannerdemo.EasyOcrScanner;
 import com.wordpress.priyankvex.easyocrscannerdemo.EasyOcrScannerListener;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScannerListener {
+
     EasyOcrScanner mEasyOcrScanner;
-    TextView textView;
+    //TextView textView;
     ProgressDialog mProgressDialog;
     private static final int REQUEST_WRITE_PERMISSION = 20;
 
@@ -38,7 +40,7 @@ public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScan
         //textView = (TextView) findViewById(R.id.textView);
 
         // initialize EasyOcrScanner instance.
-        mEasyOcrScanner = new EasyOcrScanner(OcrCaptureActivity.this, "EasyOcrScanner",
+        mEasyOcrScanner = new EasyOcrScanner(OcrCaptureActivity.this, "SpendingTrackerScanner",
                 Config.REQUEST_CODE_CAPTURE_IMAGE, "eng");
 
         // Set ocrScannerListener
@@ -88,6 +90,26 @@ public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScan
         mProgressDialog.show();
     }
 
+
+    public void radioButtonListShow(){
+        final Dialog dialog = new Dialog(OcrCaptureActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.radiobutton_dialog);
+        List<String> stringList=new ArrayList<>(Arrays.asList("Nr.1", "Linella","Metro"));  // here is list
+        for(int i=0;i<3;i++) {
+            stringList.add(stringList.get(i));
+        }
+        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+
+        for(int i=0;i<stringList.size();i++){
+            RadioButton rb=new RadioButton(OcrCaptureActivity.this); // dynamically creating RadioButton and adding to RadioGroup.
+            rb.setText(stringList.get(i));
+            rg.addView(rb);
+        }
+
+        dialog.show();
+    }
+
     /**
      * Callback when scanning is finished.
      * Good place to hide teh progress dialog.
@@ -96,15 +118,18 @@ public class OcrCaptureActivity extends AppCompatActivity implements EasyOcrScan
      */
     @Override
     public void onOcrScanFinished(Bitmap bitmap, String recognizedText) {
-        String categoryName = "linella";
-        Category category = new Category(categoryName, IExpensesType.MODE_EXPENSES);
-        RealmManager.getInstance().save(category, Category.class);
-        String description = "cheluieli";
-        Date selectedDate = new Date();
-        RealmManager.getInstance().save(new Expense(description, selectedDate, IExpensesType.MODE_EXPENSES, category,Float.valueOf(recognizedText)), Expense.class);
+        //this.radioButtonListShow();
+        System.out.println("SEEEEE HEEEEREEEEE" + recognizedText);
+//
+//        String categoryName = "linella";
+//        Category category = new Category(categoryName, IExpensesType.MODE_EXPENSES);
+//        RealmManager.getInstance().save(category, Category.class);
+//        String description = "cheluieli";
+//        Date selectedDate = new Date();
+//        RealmManager.getInstance().save(new Expense(description, selectedDate, IExpensesType.MODE_EXPENSES, category, Float.parseFloat(recognizedText)), Expense.class);
+        //textView.setText(recognizedText);
         if (mProgressDialog.isShowing()){
             mProgressDialog.dismiss();
         }
-        OcrCaptureActivity.this.finish();
     }
 }
